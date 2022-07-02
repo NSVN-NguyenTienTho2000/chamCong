@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/chamcong
+    jdbcUrl: jdbc:mysql://localhost:3306/chamcong
+    username: thont
+    password: thont
+
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username: tienthonguyen313@gmail.com
+    sender: tienthonguyen313@gmail.com
+    password: nguyentientho
+    port: 587
+    protocol: smtp
+    test-connection: false
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
