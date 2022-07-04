@@ -140,10 +140,13 @@ public class UserBusiness {
     }
 
     public IdResponse updateUser(UpdateUserRequest input) {
-        User user = userRepository.getById(input.getId());
-        CommonChecker.throwIfNull(user,"user.notFound" );
-        userRepository.save((Employee) user.setAvatar(input.getAvatar())
-                .setFullName(input.getFullName()));
-return new IdResponse(user.getId());
+        Employee employee = employeeRepository.getById(input.getId());
+        CommonChecker.throwIfNull(employee, "user.notFound");
+        userRepository.save(employee.setPhone(input.getPhone())
+                .setAddress(input.getAddress())
+                .setDateOfBirth(input.getDateOfBirth())
+                .setFullName(input.getFullName())
+                .setAvatar(input.getAvatar()));
+        return new IdResponse(employee.getId());
     }
 }

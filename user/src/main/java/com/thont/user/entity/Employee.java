@@ -19,6 +19,7 @@ public class Employee extends User{
     private Manager manager;
     private String phone;
     private String password ="coedustaff";
+    @Column(name = "date_of_birth")
     private String dateOfBirth;
     private String address;
 }
