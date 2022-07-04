@@ -1,15 +1,13 @@
 package com.thont.user.controller;
 import com.thont.common.model.response.IdResponse;
 import com.thont.user.business.UserBusiness;
-import com.thont.user.model.request.CreateEmployeeRequest;
-import com.thont.user.model.request.LoginRequest;
-import com.thont.user.model.request.LoginStaffRequest;
-import com.thont.user.model.request.RegisterRequest;
+import com.thont.user.model.request.*;
 import com.thont.user.model.response.LoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @RestController
@@ -33,6 +31,18 @@ public class UserController {
     @PostMapping("/staff/login")
     public LoginResponse loginStaff(@Valid @RequestBody LoginStaffRequest input){
         return userBusiness.loginStaff(input);
+    }
+    @PostMapping("/password/reset")
+    public IdResponse resetPassword(@Valid @RequestBody ResetPasswordRequest input){
+        return userBusiness.resetPassword(input);
+    }
+    @GetMapping("/list-user")
+    public List getUserInfo(){
+        return userBusiness.getUserInfo();
+    }
+    @PostMapping("/update-user")
+    public IdResponse updateUser(@Valid @RequestBody UpdateUserRequest input){
+        return userBusiness.updateUser(input);
     }
 
 }

@@ -8,14 +8,11 @@ import com.thont.common.service.HashService;
 import com.thont.common.service.JWTService;
 import com.thont.common.service.StringService;
 import com.thont.common.zother.enumeration.AccStatusEnum;
-import com.thont.common.zother.enumeration.DepartmentEnum;
 import com.thont.common.zother.enumeration.RoleEnum;
 import com.thont.user.entity.*;
-import com.thont.user.model.request.CreateEmployeeRequest;
-import com.thont.user.model.request.LoginRequest;
-import com.thont.user.model.request.LoginStaffRequest;
-import com.thont.user.model.request.RegisterRequest;
+import com.thont.user.model.request.*;
 import com.thont.user.model.response.LoginResponse;
+import com.thont.user.model.response.UserResponse;
 import com.thont.user.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -56,7 +54,7 @@ public class UserBusiness {
     @Transactional
     public IdResponse register(RegisterRequest input) {
         Manager user = managerRepository.save((Manager) new Manager().setPhone(input.getPhone())
-                .setPassword(hashService.hash(input.getPassword())).setStaffCode("MNGR" + setNumbers(userRepository.countUser()+1)));
+                .setPassword(hashService.hash(input.getPassword())).setStaffCode("MNGR" + setNumbers(userRepository.countUser() + 1)));
         userRoleRepository.save((UserRole) new UserRole().setUser(user)
                 .setRole(RoleEnum.USER));
         userRepository.save((User) user.setStatus(AccStatusEnum.ACTIVATED));
@@ -97,7 +95,7 @@ public class UserBusiness {
     @Transactional
     public IdResponse createEmployee(CreateEmployeeRequest input) {
         User loginUser = getCurrentUser();
-        long number = userRepository.countUser()+1;
+        long number = userRepository.countUser() + 1;
         String staffCode = "TECH" + setNumbers(number);
         User employee = userRepository.save((Employee) mapper.map(input, Employee.class)
                 .setManager((Manager) loginUser)
@@ -105,6 +103,7 @@ public class UserBusiness {
                 .setStatus(AccStatusEnum.ACTIVATED));
         return new IdResponse(employee.getId());
     }
+
     public LoginResponse loginStaff(LoginStaffRequest input) {
         User user = userRepository.getByStaffCode(input.getStaffCode());
         CommonChecker.throwIfFalse(user != null && input.getPassword().equals(user.getPassword()),
@@ -121,4 +120,30 @@ public class UserBusiness {
         return response;
     }
 
+    public IdResponse resetPassword(ResetPasswordRequest input) {
+        Employee user = employeeRepository.getByStaffCode(input.getStaffCode());
+        CommonChecker.throwIfNull(user, "user.notFound");
+        userRepository.save(user.setPassword(hashService.hash(input.getPassword())));
+        return new IdResponse(user.getId());
+    }
+
+    public List getUserInfo() {
+        return employeeRepository.getAll().stream()
+                .map(item -> new UserResponse()
+                        .setId(item.getId())
+                        .setStaffCode(item.getStaffCode())
+                        .setDateOfBirth(item.getDateOfBirth())
+                        .setPhone(item.getPhone())
+                        .setAddress(item.getAddress())
+                )
+                .collect(Collectors.toList());
+    }
+
+    public IdResponse updateUser(UpdateUserRequest input) {
+        User user = userRepository.getById(input.getId());
+        CommonChecker.throwIfNull(user,"user.notFound" );
+        userRepository.save((Employee) user.setAvatar(input.getAvatar())
+                .setFullName(input.getFullName()));
+return new IdResponse(user.getId());
+    }
 }
