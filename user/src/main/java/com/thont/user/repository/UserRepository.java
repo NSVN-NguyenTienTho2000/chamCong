@@ -2,6 +2,7 @@ package com.thont.user.repository;
 
 
 
+import com.thont.user.entity.Employee;
 import com.thont.user.entity.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,5 +24,9 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query(value = "select count(*) from  chamcong.user",nativeQuery = true)
     Long countUser();
     @Query("select user from User user where user.staffCode = :code")
-    User getByStaffCode(String code);
+    Employee getByStaffCode(String code);
+    @Query("select user from User user")
+    List<User> getAll();
+
+
 }
