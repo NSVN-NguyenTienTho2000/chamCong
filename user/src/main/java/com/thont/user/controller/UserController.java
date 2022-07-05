@@ -3,6 +3,7 @@ import com.thont.common.model.response.IdResponse;
 import com.thont.user.business.UserBusiness;
 import com.thont.user.model.request.*;
 import com.thont.user.model.response.LoginResponse;
+import com.thont.user.model.response.MyselfResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,10 @@ public class UserController {
     @PostMapping("/update-user")
     public IdResponse updateUser(@Valid @RequestBody UpdateUserRequest input){
         return userBusiness.updateUser(input);
+    }
+    @GetMapping("/get-myself")
+    public Object getMyself(){
+        return userBusiness.getMyself();
     }
 
 }

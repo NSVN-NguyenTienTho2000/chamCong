@@ -12,6 +12,7 @@ import com.thont.common.zother.enumeration.RoleEnum;
 import com.thont.user.entity.*;
 import com.thont.user.model.request.*;
 import com.thont.user.model.response.LoginResponse;
+import com.thont.user.model.response.MyselfResponse;
 import com.thont.user.model.response.UserResponse;
 import com.thont.user.repository.*;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +51,9 @@ public class UserBusiness {
     public User getCurrentUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
-
+    public Object getMyself(){
+        return mapper.map(this.getCurrentUser(), MyselfResponse.class);
+    }
     @Transactional
     public IdResponse register(RegisterRequest input) {
         Manager user = managerRepository.save((Manager) new Manager().setPhone(input.getPhone())
