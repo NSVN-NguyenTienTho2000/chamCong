@@ -2,6 +2,7 @@ package com.thont.user.business;
 
 import com.github.dozermapper.core.Mapper;
 import com.thont.common.exception.CommonChecker;
+import com.thont.common.model.request.BaseDetailRequest;
 import com.thont.common.model.response.IdResponse;
 
 import com.thont.common.service.HashService;
@@ -149,4 +150,14 @@ public class UserBusiness {
                 .setAvatar(input.getAvatar()));
         return new IdResponse(employee.getId());
     }
+    public UserResponse getEmployeeById(BaseDetailRequest input) {
+        Employee employee = employeeRepository.getById(input.getId());
+        return new UserResponse()
+                .setId(employee.getId())
+                .setStaffCode(employee.getStaffCode())
+                .setAddress(employee.getAddress())
+                .setPhone(employee.getPhone())
+                .setDateOfBirth(employee.getDateOfBirth());
+    }
+
 }

@@ -1,8 +1,11 @@
 package com.thont.user.controller;
+import com.thont.common.model.request.BaseDetailRequest;
 import com.thont.common.model.response.IdResponse;
 import com.thont.user.business.UserBusiness;
+import com.thont.user.entity.User;
 import com.thont.user.model.request.*;
 import com.thont.user.model.response.LoginResponse;
+import com.thont.user.model.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,5 +47,8 @@ public class UserController {
     public IdResponse updateUser(@Valid @RequestBody UpdateUserRequest input){
         return userBusiness.updateUser(input);
     }
-
+    @PostMapping("/get-by-id")
+    public UserResponse getEmployeeById(@Valid @RequestBody BaseDetailRequest input){
+        return userBusiness.getEmployeeById(input);
+    }
 }
